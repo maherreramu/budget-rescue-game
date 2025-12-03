@@ -194,7 +194,6 @@ body {
 .level-header {
     text-align: center;
     margin-bottom: 20px;
-    margin-top: 80px;
 }
 
 .level-header h3 {
@@ -338,6 +337,22 @@ body {
 }
 
 /* LEVEL 3 */
+.input-group select {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #475569;
+    background: #1e293b;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.input-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* LEVEL 3 */
 .report-card {
     margin-bottom: 30px;
     width: 100%;
@@ -413,6 +428,62 @@ body {
     color: #f59e0b;
     font-size: 0.9rem;
     margin-top: 5px;
+}
+
+/* TRANSITION SCREEN */
+.transition-box {
+    text-align: center;
+}
+
+.player-turn-name {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin: 20px 0;
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.instruction {
+    font-size: 1.2rem;
+    color: #cbd5e1;
+    margin-bottom: 30px;
+}
+
+/* LEADERBOARD */
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0 30px 0;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard-table th {
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.leaderboard-table td {
+    font-size: 1.1rem;
+}
+
+.leaderboard-table tr:first-child td {
+    color: var(--success-color);
+    font-weight: 700;
+}
+
+/* Winner highlight */
+/* WINNER SCREEN */
+.winner-name {
+    font-size: 3.5rem;
+    background: var(--gradient-title);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 20px 0;
 }
 
 /* MODAL */

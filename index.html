@@ -3,64 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Rescate: Maestro del Presupuesto</title>
+    <title>La Licitación: Gestión de Proyectos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="app-container">
         <!-- Header / HUD -->
         <header class="game-hud hidden" id="game-hud">
             <div class="hud-item">
-                <span class="label">Vidas</span>
-                <div class="lives-container" id="lives-display">
-                    <span class="heart">❤️</span><span class="heart">❤️</span><span class="heart">❤️</span>
-                </div>
+                <span class="label">Candidato</span>
+                <span class="value" id="hud-player-name">Jugador 1</span>
             </div>
             <div class="hud-item">
-                <span class="label">Nivel</span>
-                <span class="value" id="level-display">1/3</span>
+                <span class="label">Ronda</span>
+                <span class="value" id="hud-round">1/3</span>
             </div>
             <div class="hud-item">
-                <span class="label">Puntaje</span>
-                <span class="value" id="score-display">0</span>
+                <span class="label">Puntaje Ronda</span>
+                <span class="value" id="hud-score">0</span>
             </div>
         </header>
-
         <!-- SCREEN: START -->
         <section id="screen-start" class="screen active">
             <div class="content-box glass">
-                <h1 class="title-gradient">Gestión de Rescate</h1>
-                <h2 class="subtitle">Maestro del Presupuesto</h2>
+                <h1 class="title-gradient">La Licitación</h1>
+                <h2 class="subtitle">Gestión de Proyectos</h2>
                 <p class="intro-text">
-                    Eres un Consultor Senior. Un proyecto crítico está a punto de colapsar y te han llamado para salvarlo.
+                    Tres candidatos compiten por el puesto de Gerente.
                     <br><br>
-                    Tu misión:
-                    <ul class="mission-list">
-                        <li>1. Clasificar y ajustar el presupuesto.</li>
-                        <li>2. Gestionar el flujo de caja y calcular el punto de equilibrio.</li>
-                        <li>3. Evaluar la rentabilidad final (VPN/TIR).</li>
-                    </ul>
+                    La entrevista consta de 3 Rondas Técnicas. Solo el mejor estratega financiero se quedará con el puesto.
                 </p>
-                <button class="btn-primary" id="btn-start">Iniciar Misión</button>
+                <button class="btn-primary" id="btn-goto-register">Iniciar Proceso</button>
             </div>
         </section>
-
+        <!-- SCREEN: REGISTER -->
+        <section id="screen-register" class="screen hidden">
+            <div class="content-box glass">
+                <h3>Registro de Candidatos</h3>
+                <p>Selecciona la cantidad de jugadores y registra sus nombres.</p>
+                
+                <div class="input-group">
+                    <label>¿Cuántos candidatos participarán?</label>
+                    <select id="player-count-select">
+                        <option value="2">2 Jugadores</option>
+                        <option value="3" selected>3 Jugadores</option>
+                        <option value="4">4 Jugadores</option>
+                        <option value="5">5 Jugadores</option>
+                        <option value="6">6 Jugadores</option>
+                    </select>
+                </div>
+                <div id="player-names-container">
+                    <!-- Name inputs will be generated dynamically by JS -->
+                </div>
+                <button class="btn-primary" id="btn-start-game">Comenzar Licitación</button>
+            </div>
+        </section>
+        <!-- SCREEN: TRANSITION (Pass Device) -->
+        <section id="screen-transition" class="screen hidden">
+            <div class="content-box glass transition-box">
+                <h2>¡Tiempo!</h2>
+                <p>Es el turno de:</p>
+                <h1 class="player-turn-name" id="trans-next-player">Nombre</h1>
+                <p class="instruction">Pásale el dispositivo.</p>
+                <button class="btn-primary" id="btn-start-turn">Estoy Listo</button>
+            </div>
+        </section>
         <!-- SCREEN: LEVEL 1 (Clasificación) -->
         <section id="screen-level-1" class="screen hidden">
             <div class="level-header">
-                <h3>Nivel 1: El Orden del Caos</h3>
-                <p>Arrastra los ítems a la carpeta correcta.</p>
+                <h3>Ronda 1: El Filtro Inicial</h3>
+                <p>Clasifica los rubros del proyecto: <strong id="l1-project-type">Restaurante</strong></p>
             </div>
             
             <div class="game-area-l1">
-                <div class="item-spawner" id="item-spawner">
-                    <!-- Draggable items will appear here -->
-                </div>
-
+                <div class="item-spawner" id="item-spawner"></div>
                 <div class="drop-zones">
                     <div class="drop-zone" data-type="ingreso">
                         <div class="zone-icon">💰</div>
@@ -77,14 +96,12 @@
                 </div>
             </div>
         </section>
-
         <!-- SCREEN: LEVEL 2 (Punto de Equilibrio) -->
         <section id="screen-level-2" class="screen hidden">
             <div class="level-header">
-                <h3>Nivel 2: Sobreviviendo al Valle</h3>
-                <p>¡Crisis! Los costos han subido. Calcula el nuevo Punto de Equilibrio.</p>
+                <h3>Ronda 2: Prueba Técnica</h3>
+                <p>Calcula el Punto de Equilibrio para evitar la quiebra.</p>
             </div>
-
             <div class="content-box glass">
                 <div class="data-grid">
                     <div class="data-card">
@@ -100,90 +117,77 @@
                         <span class="data-value" id="l2-cv">$0</span>
                     </div>
                 </div>
-
-                <div class="formula-hint">
-                    Formula: Q = CF / (PV - Cv)
-                </div>
-
+                <div class="formula-hint">Q = CF / (PV - Cv)</div>
                 <div class="input-group">
-                    <label for="l2-input">Unidades a vender (Q):</label>
+                    <label>Unidades a vender (Q):</label>
                     <input type="number" id="l2-input" placeholder="Ej: 1000">
                 </div>
-
                 <button class="btn-primary" id="btn-check-l2">Calcular</button>
             </div>
         </section>
-
-        <!-- SCREEN: LEVEL 3 (Optimización de Costos) -->
+        <!-- SCREEN: LEVEL 3 (VPN/TIR) -->
         <section id="screen-level-3" class="screen hidden">
             <div class="level-header">
-                <h3>Nivel 3: Tijeras Inteligentes</h3>
-                <p>El presupuesto sigue apretado. Elimina 3 gastos NO esenciales.</p>
-                <p class="hint-text">¡Cuidado! Si cortas algo crítico, el proyecto se detiene.</p>
+                <h3>Ronda 3: Entrevista Final</h3>
+                <p>Evalúa la rentabilidad del proyecto.</p>
             </div>
-
-            <div class="content-box glass">
-                <div class="expense-list" id="expense-list">
-                    <!-- Expenses generated by JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- SCREEN: LEVEL 4 (VPN/TIR) -->
-        <section id="screen-level-4" class="screen hidden">
-            <div class="level-header">
-                <h3>Nivel 4: El Veredicto Final</h3>
-                <p>Evalúa si el proyecto fue exitoso.</p>
-            </div>
-
             <div class="content-box glass">
                 <div class="report-card">
-                    <h4>Reporte Financiero Final</h4>
+                    <h4>Reporte Financiero</h4>
                     <div class="report-item">
                         <span>Tasa de Oportunidad:</span>
-                        <span class="highlight" id="l4-tasa">0%</span>
+                        <span class="highlight" id="l3-tasa">0%</span>
                     </div>
                     <div class="report-item">
                         <span>VPN Calculado:</span>
-                        <span class="highlight" id="l4-vpn">$0</span>
+                        <span class="highlight" id="l3-vpn">$0</span>
                     </div>
                     <div class="report-item">
                         <span>TIR Calculada:</span>
-                        <span class="highlight" id="l4-tir">0%</span>
+                        <span class="highlight" id="l3-tir">0%</span>
                     </div>
                 </div>
-
-                <p class="decision-prompt">¿Cuál es tu veredicto?</p>
-
+                <p class="decision-prompt">¿Cuál es tu decisión?</p>
                 <div class="decision-buttons">
                     <button class="btn-success" id="btn-success-project">PROYECTO EXITOSO</button>
                     <button class="btn-danger" id="btn-fail-project">PROYECTO FRACASADO</button>
                 </div>
             </div>
         </section>
-
-        <!-- SCREEN: GAME OVER -->
-        <section id="screen-gameover" class="screen hidden">
-            <div class="content-box glass fail-border">
-                <h1>¡Despedido!</h1>
-                <p id="gameover-msg">El proyecto ha quebrado bajo tu gestión.</p>
-                <button class="btn-primary" onclick="location.reload()">Intentar de Nuevo</button>
+        <!-- SCREEN: ROUND SUMMARY -->
+        <section id="screen-round-summary" class="screen hidden">
+            <div class="content-box glass">
+                <h2 id="summary-title">Resultados Ronda X</h2>
+                
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Candidato</th>
+                            <th>Puntaje Ronda</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summary-body">
+                        <!-- Rows generated by JS -->
+                    </tbody>
+                </table>
+                <button class="btn-primary" id="btn-next-round">Siguiente Ronda</button>
             </div>
         </section>
-
-        <!-- SCREEN: VICTORY -->
+        <!-- SCREEN: FINAL VICTORY -->
         <section id="screen-victory" class="screen hidden">
             <div class="content-box glass success-border">
-                <h1>¡Misión Cumplida!</h1>
-                <p>Has salvado el proyecto y asegurado la rentabilidad.</p>
+                <h1>¡Contratado!</h1>
+                <p>El nuevo Gerente de Proyectos es:</p>
+                <h1 class="winner-name" id="winner-name">Nombre</h1>
                 <div class="final-score">
-                    <span>Puntaje Final:</span>
-                    <span id="final-score-value">0</span>
+                    <span>Puntaje Total:</span>
+                    <span id="winner-score">0</span>
                 </div>
-                <button class="btn-primary" onclick="location.reload()">Jugar Otra Vez</button>
+                <button class="btn-primary" onclick="location.reload()">Nueva Licitación</button>
             </div>
         </section>
-
         <!-- MODAL FEEDBACK -->
         <div id="feedback-modal" class="modal hidden">
             <div class="modal-content glass">
@@ -192,9 +196,7 @@
                 <button class="btn-secondary" id="btn-close-feedback">Continuar</button>
             </div>
         </div>
-
     </div>
-
     <script src="game.js"></script>
 </body>
 </html>

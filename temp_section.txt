@@ -1,0 +1,11 @@
+/* LEVEL 1 */
+.level-header {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 80px;
+}
+
+.level-header h3 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+}

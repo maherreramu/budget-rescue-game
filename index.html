@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Rescate: Maestro del Presupuesto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Header / HUD -->
+        <header class="game-hud hidden" id="game-hud">
+            <div class="hud-item">
+                <span class="label">Vidas</span>
+                <div class="lives-container" id="lives-display">
+                    <span class="heart">❤️</span><span class="heart">❤️</span><span class="heart">❤️</span>
+                </div>
+            </div>
+            <div class="hud-item">
+                <span class="label">Nivel</span>
+                <span class="value" id="level-display">1/3</span>
+            </div>
+            <div class="hud-item">
+                <span class="label">Puntaje</span>
+                <span class="value" id="score-display">0</span>
+            </div>
+        </header>
+
+        <!-- SCREEN: START -->
+        <section id="screen-start" class="screen active">
+            <div class="content-box glass">
+                <h1 class="title-gradient">Gestión de Rescate</h1>
+                <h2 class="subtitle">Maestro del Presupuesto</h2>
+                <p class="intro-text">
+                    Eres un Consultor Senior. Un proyecto crítico está a punto de colapsar y te han llamado para salvarlo.
+                    <br><br>
+                    Tu misión:
+                    <ul class="mission-list">
+                        <li>1. Clasificar y ajustar el presupuesto.</li>
+                        <li>2. Gestionar el flujo de caja y calcular el punto de equilibrio.</li>
+                        <li>3. Evaluar la rentabilidad final (VPN/TIR).</li>
+                    </ul>
+                </p>
+                <button class="btn-primary" id="btn-start">Iniciar Misión</button>
+            </div>
+        </section>
+
+        <!-- SCREEN: LEVEL 1 (Clasificación) -->
+        <section id="screen-level-1" class="screen hidden">
+            <div class="level-header">
+                <h3>Nivel 1: El Orden del Caos</h3>
+                <p>Arrastra los ítems a la carpeta correcta.</p>
+            </div>
+            
+            <div class="game-area-l1">
+                <div class="item-spawner" id="item-spawner">
+                    <!-- Draggable items will appear here -->
+                </div>
+
+                <div class="drop-zones">
+                    <div class="drop-zone" data-type="ingreso">
+                        <div class="zone-icon">💰</div>
+                        <h4>Ingresos</h4>
+                    </div>
+                    <div class="drop-zone" data-type="gasto">
+                        <div class="zone-icon">📉</div>
+                        <h4>Gastos</h4>
+                    </div>
+                    <div class="drop-zone" data-type="inversion">
+                        <div class="zone-icon">🏗️</div>
+                        <h4>Inversión</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN: LEVEL 2 (Punto de Equilibrio) -->
+        <section id="screen-level-2" class="screen hidden">
+            <div class="level-header">
+                <h3>Nivel 2: Sobreviviendo al Valle</h3>
+                <p>¡Crisis! Los costos han subido. Calcula el nuevo Punto de Equilibrio.</p>
+            </div>
+
+            <div class="content-box glass">
+                <div class="data-grid">
+                    <div class="data-card">
+                        <span class="data-label">Costos Fijos (CF)</span>
+                        <span class="data-value" id="l2-cf">$0</span>
+                    </div>
+                    <div class="data-card">
+                        <span class="data-label">Precio Venta (PV)</span>
+                        <span class="data-value" id="l2-pv">$0</span>
+                    </div>
+                    <div class="data-card">
+                        <span class="data-label">Costo Variable (Cv)</span>
+                        <span class="data-value" id="l2-cv">$0</span>
+                    </div>
+                </div>
+
+                <div class="formula-hint">
+                    Formula: Q = CF / (PV - Cv)
+                </div>
+
+                <div class="input-group">
+                    <label for="l2-input">Unidades a vender (Q):</label>
+                    <input type="number" id="l2-input" placeholder="Ej: 1000">
+                </div>
+
+                <button class="btn-primary" id="btn-check-l2">Calcular</button>
+            </div>
+        </section>
+
+        <!-- SCREEN: LEVEL 3 (Optimización de Costos) -->
+        <section id="screen-level-3" class="screen hidden">
+            <div class="level-header">
+                <h3>Nivel 3: Tijeras Inteligentes</h3>
+                <p>El presupuesto sigue apretado. Elimina 3 gastos NO esenciales.</p>
+                <p class="hint-text">¡Cuidado! Si cortas algo crítico, el proyecto se detiene.</p>
+            </div>
+
+            <div class="content-box glass">
+                <div class="expense-list" id="expense-list">
+                    <!-- Expenses generated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN: LEVEL 4 (VPN/TIR) -->
+        <section id="screen-level-4" class="screen hidden">
+            <div class="level-header">
+                <h3>Nivel 4: El Veredicto Final</h3>
+                <p>Evalúa si el proyecto fue exitoso.</p>
+            </div>
+
+            <div class="content-box glass">
+                <div class="report-card">
+                    <h4>Reporte Financiero Final</h4>
+                    <div class="report-item">
+                        <span>Tasa de Oportunidad:</span>
+                        <span class="highlight" id="l4-tasa">0%</span>
+                    </div>
+                    <div class="report-item">
+                        <span>VPN Calculado:</span>
+                        <span class="highlight" id="l4-vpn">$0</span>
+                    </div>
+                    <div class="report-item">
+                        <span>TIR Calculada:</span>
+                        <span class="highlight" id="l4-tir">0%</span>
+                    </div>
+                </div>
+
+                <p class="decision-prompt">¿Cuál es tu veredicto?</p>
+
+                <div class="decision-buttons">
+                    <button class="btn-success" id="btn-success-project">PROYECTO EXITOSO</button>
+                    <button class="btn-danger" id="btn-fail-project">PROYECTO FRACASADO</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN: GAME OVER -->
+        <section id="screen-gameover" class="screen hidden">
+            <div class="content-box glass fail-border">
+                <h1>¡Despedido!</h1>
+                <p id="gameover-msg">El proyecto ha quebrado bajo tu gestión.</p>
+                <button class="btn-primary" onclick="location.reload()">Intentar de Nuevo</button>
+            </div>
+        </section>
+
+        <!-- SCREEN: VICTORY -->
+        <section id="screen-victory" class="screen hidden">
+            <div class="content-box glass success-border">
+                <h1>¡Misión Cumplida!</h1>
+                <p>Has salvado el proyecto y asegurado la rentabilidad.</p>
+                <div class="final-score">
+                    <span>Puntaje Final:</span>
+                    <span id="final-score-value">0</span>
+                </div>
+                <button class="btn-primary" onclick="location.reload()">Jugar Otra Vez</button>
+            </div>
+        </section>
+
+        <!-- MODAL FEEDBACK -->
+        <div id="feedback-modal" class="modal hidden">
+            <div class="modal-content glass">
+                <h3 id="feedback-title">Título</h3>
+                <p id="feedback-msg">Mensaje</p>
+                <button class="btn-secondary" id="btn-close-feedback">Continuar</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
